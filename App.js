@@ -3,6 +3,7 @@ import React, { isValidElement, useState } from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import firebase from 'firebase';
+import moment from 'moment';
 
 const config = {
   apiKey: "AIzaSyB49iq1Nnr1_KlnNg3quGHKUkuGHhAT4aw",
@@ -33,6 +34,15 @@ export default function App() {
   var [year, setYear] = useState("")
   var [name, setName] = useState("")
 
+  const daysRemaining = () => {
+    let month = 8
+    let day = 15
+    var eventdate = moment([2021, month, day]);
+    var todaysdate = moment();
+    console.log(eventdate.diff(todaysdate, 'days'))
+    return eventdate.diff(todaysdate, 'days');
+  };
+
   const getDataObject = () => {
     let dayInt = parseInt(day, 10)
     let monthInt = parseInt(month - 1, 10)
@@ -61,30 +71,30 @@ export default function App() {
       </View>
 
       <View style={styles.newInput}>
-        <Text>Enter someone else's birthday below:</Text>
+        <Text style={{ fontSize: 30 } > Enter someone else's birthday below:</Text>
         <View style={styles.nameInput}>
-          <TextInput placeholder="First Last"
-          onChangeText={(val) => updateInfo(val, setName)} />
+          <TextInput style={{ fontSize: 30 } placeholder="First Last"
+            onChangeText={(val) => updateInfo(val, setName)} />
           <View style={styles.dateInput}>
-            
-            <TextInput placeholder="MM" 
-            keyboardType="number-pad"
-            onChangeText={(val) => updateInfo(val, setMonth)}/>
 
-            <TextInput placeholder="DD"
-            keyboardType="number-pad"
-            onChangeText={(val) => updateInfo(val, setDay)} />
-            
-            <TextInput placeholder="YYYY"
-            keyboardType="number-pad"
-            onChangeText={(val) => updateInfo(val, setYear)} />
+            <TextInput placeholder="MM"
+              keyboardType="number-pad"
+              onChangeText={(val) => updateInfo(val, setMonth)} />
+
+            <TextInput style={{ fontSize: 30 } placeholder="DD"
+              keyboardType="number-pad"
+              onChangeText={(val) => updateInfo(val, setDay)} />
+
+            <TextInput style={{ fontSize: 30 } placeholder="YYYY"
+              keyboardType="number-pad"
+              onChangeText={(val) => updateInfo(val, setYear)} />
 
           </View>
           <Button title="Add"
-          onPress={getDataObject} />
+            onPress={getDataObject} />
 
           <Button title="Fetch Data"
-          onPress={getData} />
+            onPress={getData} />
         </View>
       </View>
 
@@ -95,7 +105,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'green',
+    backgroundColor: 'lightblue',
     alignItems: 'center',
     justifyContent: 'center',
   },
