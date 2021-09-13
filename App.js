@@ -2,6 +2,25 @@ import { StatusBar } from 'expo-status-bar';
 import React, { isValidElement, useState } from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import DatePicker from 'react-native-datepicker';
+import firebase from 'firebase';
+
+const config = {
+  apiKey: "AIzaSyB49iq1Nnr1_KlnNg3quGHKUkuGHhAT4aw",
+  authDomain: "birthdayappreact-52f65.firebaseapp.com",
+  projectId: "birthdayappreact-52f65",
+  storageBucket: "birthdayappreact-52f65.appspot.com",
+  messagingSenderId: "15532505348",
+  appId: "1:15532505348:web:4478849c828751ba9ff851",
+  measurementId: "G-01B8J1WG9J"
+};
+
+firebase.initializeApp(config);
+
+const getData = () => {
+  firebase.database().ref('users').on('value', (snapshot) => {
+    console.log(snapshot.val())
+  });
+}
 
 const updateInfo = (val, updateFunc) => {
   updateFunc(val);
@@ -63,6 +82,9 @@ export default function App() {
           </View>
           <Button title="Add"
           onPress={getDataObject} />
+
+          <Button title="Fetch Data"
+          onPress={getData} />
         </View>
       </View>
 
