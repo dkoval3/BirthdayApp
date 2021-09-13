@@ -22,7 +22,6 @@ if (!firebase.apps.length) {
 const getData = () => {
   let returnVal
   firebase.database().ref('users').on('value', (snapshot) => {
-    console.log(snapshot.val())
     returnVal = snapshot.val()
   });
   return returnVal
@@ -30,7 +29,6 @@ const getData = () => {
 
 const updateInfo = (val, updateFunc) => {
   updateFunc(val);
-  console.log(typeof val);
 }
 // for a date, 3 numbers represent year, month day
 export default function App() {
@@ -38,7 +36,6 @@ export default function App() {
   var [day, setDay] = useState("")
   var [year, setYear] = useState("")
   var [name, setName] = useState("")
-
   var [idx, setIdx] = useState(0)
 
   const daysRemaining = (monthParam, dayParam) => {
@@ -46,8 +43,11 @@ export default function App() {
     let day =  dayParam
     var eventdate = moment([2021, month, day]);
     var todaysdate = moment();
-    console.log(`${month} ${day} ${eventdate} ${todaysdate}`)
-    console.log(eventdate.diff(todaysdate, 'days'))
+    // console.log(`${month} ${day} ${eventdate} ${todaysdate}`)
+    // console.log(eventdate.diff(todaysdate, 'days'))
+    if (eventdate.diff(todaysdate, 'days') < 0) {
+      eventdate = moment([2022, month, day]);
+    }
     return eventdate.diff(todaysdate, 'days');
   };
 
@@ -63,7 +63,7 @@ export default function App() {
       year: yearInt,
       date: new Date(yearInt, monthInt, dayInt)
     };
-    console.log(objectData)
+    // console.log(objectData)
     return objectData
   };
 
@@ -80,26 +80,25 @@ export default function App() {
   var currYear = parseInt(splitDate[2])
 
   var timeRem = daysRemaining(currMonth, currDay)
-  console.log(currBirthday)
-  // console.log(`${currMonth} ${currDay} ${currYear}`)
 
-  
   
   return (
     <View style={styles.container}>
 
-      <View>
-        <Text>{currName}</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{currName}</Text>
       </View>
 
-      <View>
-        <Text>It's {currName}'s birthday in {timeRem} days!</Text>
+      <View style={styles.messageContainer}>
+        <Text style={styles.messageStyle}>
+          It's {currName}'s birthday in {timeRem} days!
+        </Text>
       </View>
 
       <View style={styles.newInput}>
-        <Text style={{ fontSize: 30 }} > Enter someone else's birthday below:</Text>
+        <Text style={styles.inputMessage} > Enter someone else's birthday below:</Text>
         <View style={styles.nameInput}>
-          <TextInput style={{ fontSize: 30 }} placeholder="First Last"
+          <TextInput style={styles.textInput} placeholder="First Last"
             onChangeText={(val) => updateInfo(val, setName)} />
           <View style={styles.dateInput}>
 
@@ -119,9 +118,6 @@ export default function App() {
           <Button title="Add"
             onPress={getDataObject} />
 
-          <Button title="Fetch Data"
-            onPress={getData} />
-
           <Button 
           title="Next Friend"
           onPress={() => setIdx((idx + 1) % birthdayList.length)}/>
@@ -137,8 +133,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'lightblue',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  header: {
+    paddingTop: 60,
+    paddingBottom: 80
+  },
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 40,
+    textAlign: "center"
+  },
+  messageContainer: {
+    paddingBottom: 30
+  },
+  messageStyle: {
+    fontSize: 25,
+    textAlign: "center"
+  },
+  inputMessage: {
+    paddingBottom: 10,
+    fontSize: 20,
+    textAlign: "center"
+  },
+  nameInput: {
+    alignItems: "center"
   },
   textInput: {
     fontSize: 20
